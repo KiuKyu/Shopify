@@ -8,9 +8,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Table(name = "products")
 public class Product {
     @Id
@@ -22,13 +22,22 @@ public class Product {
     private String name;
 
     @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @NotNull
-    @Column(name = "CREATE_DATE", nullable = false)
+    @Column(nullable = false)
+    private double price;
+
+    @NotNull
+    @Column(columnDefinition = "VARCHAR", nullable = false)
+    private String image;
+
+    @NotNull
+    @Column(name = "create_date", nullable = false)
     private long createDate;
 
     @NotNull
-    @Column(name = "MODIFY_DATE", nullable = false)
+    @Column(name = "modify_date", nullable = false)
     private long modifyDate = 0L;
 }

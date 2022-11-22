@@ -22,10 +22,6 @@ public class Role {
     private String name;
 
     @NotNull
-    @Column(name = "is_admin", nullable = false)
-    private boolean isAdmin = false;
-
-    @NotNull
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
 

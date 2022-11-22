@@ -11,19 +11,19 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "categories")
-public class Category {
+@Table(name = "brands")
+public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    @Column(columnDefinition = "VARCHAR(50)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(20)", nullable = false)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "brand_id")
-    private Brand brand;
+    @NotNull
+    @Column(columnDefinition = "VARCHAR(100)", nullable = false)
+    private String description;
 
     @NotNull
     @Column(name = "create_date", nullable = false)

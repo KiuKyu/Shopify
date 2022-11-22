@@ -1,32 +1,26 @@
 package com.shopify.service.product;
 
+import com.shopify.model.dto.CategoryDTO;
 import com.shopify.model.persistence.product.Category;
 import com.shopify.repository.ICategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CategoryService implements ICategoryService{
+public class CategoryService implements ICategoryService {
     @Autowired
     private ICategoryRepository categoryRepository;
 
     @Override
-    public List<Category> findAll() {
-        List<Category> categories = (List<Category>) categoryRepository.findAll();
-        return categories;
+    public Iterable<Category> findAll() {
+        return categoryRepository.findAll();
     }
 
     @Override
-    public Category findById(Long id) {
-        Optional<Category> categoryOptional = categoryRepository.findById(id);
-        if (!categoryOptional.isPresent()) {
-            return null;
-        } else {
-            return categoryOptional.get();
-        }
+    public Optional<Category> findById(Long id) {
+        return categoryRepository.findById(id);
     }
 
     @Override
@@ -36,11 +30,41 @@ public class CategoryService implements ICategoryService{
 
     @Override
     public void deleteById(Long id) {
+        categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public Category testSave(CategoryDTO categoryDTO) {
+        Category newCategory = new Category();
+        newCategory.setName(categoryDTO.getName());
+        newCategory.setBrand(categoryDTO.getBrand());
+
+        long currentTime = System.currentTimeMillis();
+        newCategory.setCreateDate(currentTime);
+        categoryRepository.save(newCategory);
+        return newCategory;
+    }
+
+    @Override
+    public Category testFind(Long id) {
+        Optional<Category> categoryOptional = categoryRepository.findById(id);
+        if (categoryOptional.isPresent()) {
+            Category category = categoryOptional.get();
+            return category;
+        }
+        return null;
+    }
+
+    @Override
+    public Category testUpdate(Long id, Category updatedCategory) {
         Optional<Category> categoryOptional = categoryRepository.findById(id);
         if (!categoryOptional.isPresent()) {
             return null;
         } else {
-            categoryRepository.deleteById(id);
+            updatedCategory.setId(id);
+            long currentTime = System.currentTimeMillis();
+            updatedCategory.setModifyDate(currentTime);
+            return categoryRepository.save(updatedCategory);
         }
     }
 }

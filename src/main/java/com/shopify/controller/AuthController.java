@@ -16,10 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -48,7 +45,7 @@ public class AuthController {
                 CustomResponse message = new CustomResponse("Mật khẩu không đúng");
                 return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
             } else {
-                Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(currentUser.getUsername(), currentUser.getPassword()));
+                Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(currentUser.getUsername(), loginForm.getPassword()));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 String jwt = jwtProvider.generateTokenLogin(authentication);
                 UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -63,9 +60,7 @@ public class AuthController {
         if (!confirmPasswordMatch) {
             return new ResponseEntity<>(new CustomResponse("Mật khẩu không trùng khớp"), HttpStatus.BAD_REQUEST);
         } else {
-            User newUser = new User();
-            newUser.setUsername(registerForm.getUsername());
-            newUser.setPassword(registerForm.getPassword());
+            User newUser = new User(registerForm.getUsername(), registerForm.getPassword());
             userService.saveUser(newUser, "ROLE_USER");
             return new ResponseEntity<>(newUser, HttpStatus.CREATED);
         }

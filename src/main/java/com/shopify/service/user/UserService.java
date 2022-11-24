@@ -103,7 +103,8 @@ public class UserService implements IUserService{
         user.setPassword(encodedPassword);
         user.setRoles(roles);
         user.setCreateDate(System.currentTimeMillis());
-        return userRepository.save(user);
+        userRepository.save(user);
+        return user;
     }
 
     @Override

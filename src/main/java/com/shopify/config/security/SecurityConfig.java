@@ -12,6 +12,7 @@ import com.shopify.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -35,11 +36,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private IRoleService roleService;
 
-    @Autowired
-    private IUserRepository userRepository;
-
-    @Autowired
-    private IRoleRepository roleRepository;
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override
@@ -72,9 +68,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         Iterable<User> users = userService.findAll();
         Iterable<Role> roles = roleService.findAll();
         if (!roles.iterator().hasNext()) {
-            Role roleAdmin = new Role("ROLE_ADMIN");
+            long currentTime = System.currentTimeMillis();
+            Role roleAdmin = new Role("ROLE_ADMIN", currentTime);
             roleService.save(roleAdmin);
-            Role roleUser = new Role("ROLE_USER");
+            Role roleUser = new Role("ROLE_USER", currentTime);
             roleService.save(roleUser);
         }
         if (!users.iterator().hasNext()) {
@@ -88,7 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().ignoringAntMatchers("/**");
         http.httpBasic().authenticationEntryPoint(restServiceEntryPoint());
         http.authorizeRequests()
-                .antMatchers("/api/login", "/api/register", "/**").permitAll()
+                .antMatchers("/login", "/register", "/**").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)

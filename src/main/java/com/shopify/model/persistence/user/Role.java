@@ -38,6 +38,11 @@ public class Role {
         this.createDate = System.currentTimeMillis();
     }
 
+    public Role(String name, Long createDate) {
+        this.name = name;
+        this.createDate = createDate;
+    }
+
     public Role(Long id, String name) {
         this.id = id;
         this.name = name;

@@ -32,4 +32,14 @@ public class Role {
     @NotNull
     @Column(name = "modify_date", nullable = false)
     private long modifyDate = 0L;
+
+    public Role(String name) {
+        this.name = name;
+        this.createDate = System.currentTimeMillis();
+    }
+
+    public Role(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

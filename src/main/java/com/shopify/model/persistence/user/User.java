@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -18,11 +19,16 @@ public class User {
     private Long id;
 
     @NotNull
-    @Column(columnDefinition = "VARCHAR(50)", nullable = false)
-    private String name;
+    @Column(columnDefinition = "VARCHAR(50)", nullable = false, unique = true)
+    private String username;
 
-    @ManyToOne
-    private Role role;
+    @NotNull
+    @Column(columnDefinition = "VARCHAR(60)", nullable = false)
+    private String password;
+
+    @ManyToMany
+    @JoinTable(name = "user_role")
+    private List<Role> roles;
 
     @NotNull
     @Column(name = "create_date", nullable = false)
@@ -31,4 +37,10 @@ public class User {
     @NotNull
     @Column(name = "modify_date", nullable = false)
     private long modifyDate = 0L;
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+        this.createDate = System.currentTimeMillis();
+    }
 }

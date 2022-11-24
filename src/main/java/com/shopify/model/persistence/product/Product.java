@@ -30,7 +30,7 @@ public class Product {
     private double price;
 
     @NotNull
-    @Column(columnDefinition = "VARCHAR", nullable = false)
+    @Column(columnDefinition = "VARCHAR(1000)", nullable = false)
     private String image;
 
     @NotNull

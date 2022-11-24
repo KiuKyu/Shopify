@@ -57,6 +57,7 @@ public class ProductService implements IProductService {
             product.setName(productDTO.getName());
             product.setCategory(productDTO.getCategory());
             product.setImage(fileName);
+            product.setPrice(productDTO.getPrice());
             product.setCreateDate(currentTime);
             productRepository.save(product);
             return product;
@@ -84,6 +85,7 @@ public class ProductService implements IProductService {
             Product oldProduct = productOptional.get();
             oldProduct.setId(id);
             oldProduct.setName(productDTO.getName());
+            oldProduct.setPrice(productDTO.getPrice());
             oldProduct.setCategory(productDTO.getCategory());
             long currentTime = System.currentTimeMillis();
             oldProduct.setModifyDate(currentTime);
